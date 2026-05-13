@@ -1,4 +1,4 @@
-const URL_GOOGLE_SCRIPT = "https://script.google.com/macros/s/AKfycbxZSxulZ0B3Qe3Wwir8uVF_2ugjxu-tZ5gdhiu40grQf_knsXrZZrvb8sd5JcHD0_jQ/exec";
+const URL_GOOGLE_SCRIPT = "https://script.google.com/macros/s/AKfycbwqlhnmqNY179jcCwhh-2gkgH5S4FX_LDtTy94_zXm30i0Fd100F2v8i3efbBryzlLR/exec";
 
 document.getElementById('formOficio').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -19,10 +19,10 @@ document.getElementById('formOficio').addEventListener('submit', async (e) => {
     msg.innerHTML = '';
 
     try {
-        // CONSTRUIMOS LA URL CON LOS PARÁMETROS
+        // CONSTRUIMOS LA URL CON LOS PARÁMETROS (GET)
         const url = `${URL_GOOGLE_SCRIPT}?para=${encodeURIComponent(para)}&asunto=${encodeURIComponent(asunto)}&token=${encodeURIComponent(token)}`;
         
-        // PETICIÓN GET (sin headers = sin problemas de CORS)
+        // PETICIÓN GET - Google Apps Script maneja CORS automáticamente
         const response = await fetch(url, { method: 'GET' });
         const nroGenerado = await response.text();
         
