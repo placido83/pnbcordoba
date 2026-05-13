@@ -1,4 +1,4 @@
-const URL_GOOGLE_SCRIPT = "https://script.google.com/macros/s/AKfycbxB9Xj2pcSt4iCuYkR9VusJnn9PxEemwRE19kZ5Huhyh1CZFuKsxGZl0Y_kyei8n7xx/exec";
+const URL_GOOGLE_SCRIPT = "https://script.google.com/macros/s/AKfycbyPtzxrtvR70u2HUVqbXNvIfVWopi3Fn4kyvafyc2YDiWMC-ArhuuvX3Dx1MxNrF-Jf/exec";
 
 document.getElementById('formOficio').addEventListener('submit', async (e) => {
     e.preventDefault();
