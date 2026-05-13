@@ -1,4 +1,4 @@
-const URL_GOOGLE_SCRIPT = "https://script.google.com/macros/s/AKfycbxB9Xj2pcSt4iCuYkR9VusJnn9PxEemwRE19kZ5Huhyh1CZFuKsxGZl0Y_kyei8n7xx/exec"; // Asegúrate de mantener tu URL
+const URL_GOOGLE_SCRIPT = "https://script.google.com/macros/s/AKfycbxB9Xj2pcSt4iCuYkR9VusJnn9PxEemwRE19kZ5Huhyh1CZFuKsxGZl0Y_kyei8n7xx/exec";
 
 document.getElementById('formOficio').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -16,35 +16,44 @@ document.getElementById('formOficio').addEventListener('submit', async (e) => {
         return;
     }
 
+    // Deshabilitar botón y mostrar estado de carga
     btn.disabled = true;
-    msg.innerHTML = "Procesando...";
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Procesando...';
+    msg.innerHTML = '';
 
     const datos = { para, asunto, token };
 
     try {
         const response = await fetch(URL_GOOGLE_SCRIPT, {
             method: 'POST',
-    cache: 'no-cache',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(datos)
+            cache: 'no-cache',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
         });
-        // IMPORTANTE: Con 'no-cors', no podemos leer la respuesta de Google, 
-// así que asumimos éxito si no hubo error de conexión.
-msg.innerHTML = `<div class="alert alert-success">Solicitud enviada.<br>Revise su Excel en unos segundos.</div>`;
-document.getElementById('formOficio').reset();
-        const nroGenerado = await response.text();
 
-        if (nroGenerado.includes("Error")) {
-            msg.innerHTML = `<b style="color:red">${nroGenerado}</b>`;
-        } else {
-            // ÉXITO: Muestra el número y limpia el formulario
-            msg.innerHTML = `<div class="alert alert-success">Asignado con éxito:<br><h4>${nroGenerado}</h4></div>`;
-            document.getElementById('formOficio').reset();
+        // Obtener la respuesta del servidor
+        const nroGenerado = await response.text();
+        
+        console.log('Respuesta del servidor:', nroGenerado);
+        console.log('Status:', response.status);
+
+        // Verificar si la respuesta es un error
+        if (nroGenerado.toLowerCase().includes('error') || response.status !== 200) {
+            throw new Error(nroGenerado || `Error HTTP ${response.status}`);
         }
+
+        // ÉXITO: Mostrar el número generado
+        msg.innerHTML = `<div class="alert alert-success">✅ Oficio asignado con éxito:<br><h4>${nroGenerado}</h4></div>`;
+        document.getElementById('formOficio').reset();
+        
     } catch (error) {
-        msg.innerHTML = `<b style="color:red">Error de conexión. Verifique el Excel.</b>`;
+        console.error('Error completo:', error);
+        msg.innerHTML = `<div class="alert alert-danger">❌ Error: ${error.message}<br><small>Revisa la consola (F12) para más detalles</small></div>`;
+    } finally {
+        // Reactivar botón
+        btn.disabled = false;
+        btn.innerHTML = 'Generar Oficio';
     }
-    btn.disabled = false;
 });
