@@ -24,9 +24,17 @@ document.getElementById('formOficio').addEventListener('submit', async (e) => {
     try {
         const response = await fetch(URL_GOOGLE_SCRIPT, {
             method: 'POST',
-            body: JSON.stringify(datos)
+    mode: 'no-cors', // <--- AGREGA ESTA LÍNEA
+    cache: 'no-cache',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(datos)
         });
-
+        // IMPORTANTE: Con 'no-cors', no podemos leer la respuesta de Google, 
+// así que asumimos éxito si no hubo error de conexión.
+msg.innerHTML = `<div class="alert alert-success">Solicitud enviada.<br>Revise su Excel en unos segundos.</div>`;
+document.getElementById('formOficio').reset();
         const nroGenerado = await response.text();
 
         if (nroGenerado.includes("Error")) {
