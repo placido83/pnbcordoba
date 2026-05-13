@@ -1,4 +1,4 @@
-const URL_GOOGLE_SCRIPT = "TU_URL_AQUI"; // Asegúrate de mantener tu URL
+const URL_GOOGLE_SCRIPT = "https://script.google.com/macros/s/AKfycbxB9Xj2pcSt4iCuYkR9VusJnn9PxEemwRE19kZ5Huhyh1CZFuKsxGZl0Y_kyei8n7xx/exec"; // Asegúrate de mantener tu URL
 
 document.getElementById('formOficio').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -24,7 +24,6 @@ document.getElementById('formOficio').addEventListener('submit', async (e) => {
     try {
         const response = await fetch(URL_GOOGLE_SCRIPT, {
             method: 'POST',
-    mode: 'no-cors', // <--- AGREGA ESTA LÍNEA
     cache: 'no-cache',
     headers: {
         'Content-Type': 'application/json'
