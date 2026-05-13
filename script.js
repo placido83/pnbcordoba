@@ -24,24 +24,18 @@ document.getElementById('formOficio').addEventListener('submit', async (e) => {
     const datos = { para, asunto, token };
 
     try {
+        // SIN HEADERS PERSONALIZADOS para evitar problema de CORS
         const response = await fetch(URL_GOOGLE_SCRIPT, {
             method: 'POST',
-            cache: 'no-cache',
-            headers: {
-                'Content-Type': 'application/json'
-            },
             body: JSON.stringify(datos)
         });
 
-        // Obtener la respuesta del servidor
         const nroGenerado = await response.text();
         
         console.log('Respuesta del servidor:', nroGenerado);
-        console.log('Status:', response.status);
 
-        // Verificar si la respuesta es un error
-        if (nroGenerado.toLowerCase().includes('error') || response.status !== 200) {
-            throw new Error(nroGenerado || `Error HTTP ${response.status}`);
+        if (nroGenerado.toLowerCase().includes('error')) {
+            throw new Error(nroGenerado);
         }
 
         // ÉXITO: Mostrar el número generado
@@ -49,8 +43,8 @@ document.getElementById('formOficio').addEventListener('submit', async (e) => {
         document.getElementById('formOficio').reset();
         
     } catch (error) {
-        console.error('Error completo:', error);
-        msg.innerHTML = `<div class="alert alert-danger">❌ Error: ${error.message}<br><small>Revisa la consola (F12) para más detalles</small></div>`;
+        console.error('Error:', error);
+        msg.innerHTML = `<div class="alert alert-danger">❌ Error: ${error.message}</div>`;
     } finally {
         // Reactivar botón
         btn.disabled = false;
