@@ -19,13 +19,11 @@ document.getElementById('formOficio').addEventListener('submit', async (e) => {
     msg.innerHTML = '';
 
     try {
-        // USAMOS GET CON PARÁMETROS EN LA URL (esto SÍ funciona con CORS)
+        // CONSTRUIMOS LA URL CON LOS PARÁMETROS
         const url = `${URL_GOOGLE_SCRIPT}?para=${encodeURIComponent(para)}&asunto=${encodeURIComponent(asunto)}&token=${encodeURIComponent(token)}`;
         
-        const response = await fetch(url, {
-            method: 'GET'
-        });
-
+        // PETICIÓN GET (sin headers = sin problemas de CORS)
+        const response = await fetch(url, { method: 'GET' });
         const nroGenerado = await response.text();
         
         if (nroGenerado.toLowerCase().includes('error')) {
